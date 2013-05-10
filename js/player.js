@@ -1,7 +1,7 @@
 Player = PhysicsObject.extend({
     position: {
         x: 0.5,
-        y: 0.9
+        y: 0.9455
     },
     size: {
         half_width: 1,
