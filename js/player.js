@@ -12,7 +12,7 @@ Player = PhysicsObject.extend({
 
     init: function () {
         var fixDef = new b2FixtureDef();
-        fixDef.density = 10000000;
+        fixDef.density = 100000000000;
         fixDef.friction = 0;
         fixDef.restitution = 0;
         fixDef.shape = new b2PolygonShape();

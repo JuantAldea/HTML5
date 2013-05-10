@@ -13,7 +13,7 @@ World = Class.extend({
 
     world: null,
 
-    gravity: new b2Vec2(0, 10),
+    gravity: new b2Vec2(0, 20),
 
     init: function () {
         this.canvas = document.getElementById("canvas");
