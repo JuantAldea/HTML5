@@ -9,8 +9,10 @@ RopeComponent = Block.extend({
 
     init: function (properties, rope) {
         this.parentRope = rope;
-        properties["parentRope"] = rope;
-        properties["type"] = "rope";
+        properties.parentRope = rope;
+        properties.name = "rope";
+        properties.type = "static";
+
         this.parent(properties);
 
         var self = this;
@@ -18,8 +20,8 @@ RopeComponent = Block.extend({
         self.body.ShouldCollide = function (other) {
             var otherData = other.GetUserData();
             if (otherData != null) {
-                if (otherData.type == "rope") return false;
-                if (otherData.type == "player") return false;
+                //if (otherData.name == "rope") return false;
+                //if (otherData.name == "player") return false;
             }
 
             for (var jn = self.body.m_jointList; jn; jn = jn.next) {
@@ -28,7 +30,6 @@ RopeComponent = Block.extend({
                         return false;
                     }
             }
-            // self.parentRope.destroy();
             return true;
         };
     }
@@ -43,39 +44,39 @@ Rope = Class.extend({
     properties: {},
     markedForDestruction: false,
     speed: 1,
+    halfHeight: 0,
+    lastExpansionTime: Date.now(),
+    expansionTime: 25,
 
     init: function (position) {
-        var height = 0.01
+        var height = 0.025
+        this.halfHeight = height * 2.3;
         this.x = position.x;
-        this.y = position.y;
-        this.y -= 0.02
-            this.properties = {
-                position: {
-                    x: this.x,
-                    y: this.y
-                },
-                half_size: {
-                    width: 0.001,
-                    height: height
-                },
-                destroyable: false,
-                parentRope: this
-            };
-
+        this.y = position.y - height;
+        //this.y -= 0.02
+        this.properties = {
+            position: {
+                x: this.x,
+                y: this.y
+            },
+            half_size: {
+                width: 0.001,
+                height: height
+            },
+            destroyable: false,
+            parentRope: this
+        };
         this.bodies.push(new RopeComponent(this.properties, this));
     },
 
     update: function () {
-
-        if (this.bodies.length == 0) {
+        var now = Date.now();
+        if (this.lastExpansionTime + this.expansionTime > now){
             return;
         }
-
-        this.properties.position.y = this.y - this.bodies.length * 2 * this.properties.half_size.height;
-
-        if (this.properties.position.y > 0) {
-            this.bodies.push(new RopeComponent(this.properties, this));
-        }
+        this.lastExpansionTime = now;
+        this.properties.position.y = this.y - this.bodies.length * this.halfHeight;
+        this.bodies.push(new RopeComponent(this.properties, this));
     },
 
     destroy: function () {
@@ -89,7 +90,6 @@ Rope = Class.extend({
             GameWorld.DestroyBody(this.bodies[i].body);
         }
         this.bodies = [];
-        harpoon = null;
     },
 
     onTouch: function () {

@@ -3,7 +3,7 @@ var levels = [];
 var level1 = {
     bubbles: [
         {
-            radius: 1,
+            radius: 0.1,
             position: {
                 x: 0.5,
                 y: 0.5
@@ -14,7 +14,7 @@ var level1 = {
             }
         },
         {
-            radius: 1,
+            radius: 0.1,
             position: {
                 x: 0.2,
                 y: 0.2
@@ -37,7 +37,8 @@ var level1 = {
                 height: 0.01
             },
             destroyable: false,
-            type: "block"
+            type: 'static',
+            name: "block"
         },
         {
             position: {
@@ -49,7 +50,8 @@ var level1 = {
                 height: 0.01
             },
             destroyable: false,
-            type: "block"
+            type: 'static',
+            name: "block"
         }
     ]
 };

@@ -43,7 +43,8 @@ Game = Class.extend({
                 height: 0.01
             },
             destroyable: false,
-            type: "block"
+            type: 'static',
+            name: "block"
         });
 
         //floor
@@ -57,7 +58,8 @@ Game = Class.extend({
                 height: 0.01
             },
             destroyable: false,
-            type: "block-floor"
+            type: 'static',
+            name: "block-floor"
         });
         //left wall
         new Block({
@@ -72,7 +74,8 @@ Game = Class.extend({
             },
 
             destroyable: false,
-            type: "block-floor"
+            type: 'static',
+            name: "block-floor"
         });
 
         new Block({
@@ -87,7 +90,8 @@ Game = Class.extend({
             },
 
             destroyable: false,
-            type: "block-floor"
+            type: 'static',
+            name: "block-floor"
         });
     },
 
@@ -103,20 +107,22 @@ Game = Class.extend({
 
     update: function () {
         if (this.inputEngine) {
-            var movement = new b2Vec2(0, 0);
-            //var current_velocity = this.player.body.GetLinearVelocity();
-            //movement.Add(current_velocity);
-            var spawnPoint = this.player.body.GetPosition();
-            if (this.inputEngine.actions['move-up']) {
+
+            if (this.inputEngine.actions['fire']) {
                 var spawnPoint = this.player.body.GetPosition();
                 spawnPoint.x /= GameWorld.scaled_width;
                 spawnPoint.y /= GameWorld.scaled_height;
-
                 this.harpoonHandler.spawnHarpoon(spawnPoint.x, spawnPoint.y);
+            }
+
+            var movement = new b2Vec2(0, 0);
+
+            if (this.inputEngine.actions['move-up']) {
 
             }
 
             if (this.inputEngine.actions['move-down']) {
+
             }
 
             if (this.inputEngine.actions['move-left']) {

@@ -17,7 +17,7 @@ Player = PhysicsObject.extend({
         fixDef.restitution = 0;
         //fixDef.shape = new b2PolygonShape();
         fixDef.shape = new b2CircleShape();
-        fixDef.shape.SetRadius(1);
+        fixDef.shape.SetRadius(GameWorld.scaled_height * 0.1);
         //fixDef.shape.SetAsBox(this.size.half_width * GameWorld.scaled_width, this.size.half_height * GameWorld.scaled_height);
         //fixDef.shape.SetAsBox(this.size.half_width, this.size.half_height);
 
@@ -28,15 +28,16 @@ Player = PhysicsObject.extend({
         bodyDef.fixedRotation = true;
 
         bodyDef.userData = {};
-        bodyDef.userData["type"] = "player";
+        bodyDef.userData["name"] = "player";
 
         this.parent(bodyDef, fixDef);
 
+        /*
         var self = this;
         self.body.ShouldCollide = function (other) {
             var otherData = other.GetUserData();
             if (otherData != null) {
-                if (otherData.type == "rope") return false;
+                if (otherData.name == "rope") return false;
             }
 
             if (this.m_type != b2Body.b2_dynamicBody && other.m_type != b2Body.b2_dynamicBody) {
@@ -50,7 +51,7 @@ Player = PhysicsObject.extend({
                     }
             }
             return true;
-        };
+        };*/
     }
 });
 

@@ -19,7 +19,8 @@ Block = PhysicsObject.extend({
         this.half_height = block.half_size.height;
         this.half_width = block.half_size.width;
         var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_staticBody;
+        bodyDef.type = block.type == 'kinematic' ? b2Body.b2_kinematicBody : block.type == 'dynamic' ? b2Body.b2_dynamicBody : b2Body.b2_staticBody;
+        //bodyDef.type = b2Body.b2_dynamicBody;
         bodyDef.position.x = block.position.x;
         bodyDef.position.y = block.position.y;
 
@@ -37,7 +38,7 @@ Block = PhysicsObject.extend({
                     }
             }
             var otherData = other.GetUserData();
-            if (otherData["parentRope"]){
+            if (otherData["parentRope"]) {
                 otherData.parentRope.destroy();
             }
             return true;

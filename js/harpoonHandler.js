@@ -7,7 +7,7 @@
 HarpoonHandler = Class.extend({
     aliveHarpoons: [],
     lastShootTime: Date.now(),
-    cooldown: 250,
+    cooldown: 100,
 
     init: function () {
 
@@ -15,14 +15,12 @@ HarpoonHandler = Class.extend({
 
     spawnHarpoon: function (x, y) {
         var now = Date.now();
-        console.log("last", this.lastShootTime);
-        console.log("diff", Date.now() - this.lastShootTime);
-        console.log("off", this.lastShootTime + this.cooldown < now);
 
         if (this.lastShootTime + this.cooldown > now){
             return;
         }
         this.lastShootTime = now;
+
         var overlappingHarpoon = false;
         for (var i = 0; i < this.aliveHarpoons.length; i++) {
             if (Math.abs(this.aliveHarpoons[i].x - x) < 0.02) {
