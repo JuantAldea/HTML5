@@ -35,7 +35,6 @@ World = Class.extend({
     },
 
     update: function () {
-        if (harpoon) harpoon.update();
         this.world.Step(1 / 60, 10, 10);
         this.world.DrawDebugData();
         this.world.ClearForces();

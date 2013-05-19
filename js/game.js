@@ -6,6 +6,7 @@ Game = Class.extend({
 
     inputEngine: null,
 
+    harpoonHandler: new HarpoonHandler(),
 
     init: function () {
 
@@ -107,24 +108,23 @@ Game = Class.extend({
             //movement.Add(current_velocity);
             var spawnPoint = this.player.body.GetPosition();
             if (this.inputEngine.actions['move-up']) {
-                if (!harpoon) {
-                    var spawnPoint = this.player.body.GetPosition();
-                    spawnPoint.x /= GameWorld.scaled_width;
-                    spawnPoint.y /= GameWorld.scaled_height;;
-                    harpoon = new Rope({x: spawnPoint.x, y: spawnPoint.y});
-                }
+                var spawnPoint = this.player.body.GetPosition();
+                spawnPoint.x /= GameWorld.scaled_width;
+                spawnPoint.y /= GameWorld.scaled_height;
+
+                this.harpoonHandler.spawnHarpoon(spawnPoint.x, spawnPoint.y);
+
             }
 
             if (this.inputEngine.actions['move-down']) {
-                //if (!harpoon) var harpoon = new Harpoon(5, 5, 5);
             }
 
             if (this.inputEngine.actions['move-left']) {
-                movement.x += -1;
+                movement.x += -0.5;
             }
 
             if (this.inputEngine.actions['move-right']) {
-                movement.x += 1;
+                movement.x += 0.5;
             }
 
             if (movement.x !== 0 || movement.y !== 0) {
@@ -134,7 +134,7 @@ Game = Class.extend({
 
             this.player.body.SetLinearVelocity(movement);
         }
-
+        this.harpoonHandler.update();
         this.world.update();
     },
 

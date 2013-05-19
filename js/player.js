@@ -1,7 +1,7 @@
 Player = PhysicsObject.extend({
     position: {
         x: 0.5,
-        y: 1
+        y: 0.95
     },
     size: {
         half_width: 0.1,
@@ -25,6 +25,7 @@ Player = PhysicsObject.extend({
         bodyDef.type = b2Body.b2_dynamicBody;
         bodyDef.position.x = this.position.x;
         bodyDef.position.y = this.position.y;
+        bodyDef.fixedRotation = true;
 
         bodyDef.userData = {};
         bodyDef.userData["type"] = "player";

@@ -8,10 +8,18 @@ InputEngine = Class.extend({
     },
 
     init: function () {
-        this.bind(87, 'move-up');
+        //this.bind(87, 'move-up');
+        this.bind(32, 'move-up');
         this.bind(65, 'move-left');
         this.bind(83, 'move-down');
         this.bind(68, 'move-right');
+
+        /*
+        this.bind(38, 'move-up');
+        this.bind(37, 'move-left');
+        this.bind(40, 'move-down');
+        this.bind(39, 'move-right');
+        */
 
         var self = this;
         document.getElementById('canvas').addEventListener('mousemove', function (event) {
@@ -35,6 +43,7 @@ InputEngine = Class.extend({
         });
 
         document.getElementById('canvas').addEventListener('keydown', function (event) {
+            console.log(event.keyCode);
             self.onKeyDown(event);
         });
 
@@ -50,17 +59,17 @@ InputEngine = Class.extend({
     onMouseUp: function(event){
         this.actions['move-up'] = false;
     },
-
-    onMouseMove: function (event) {
-        this.mouse.x = event.clientX;
-        this.mouse.y = event.clientY;
-    },
-
     onKeyDown: function (event) {
         var action = this.bindings[event.keyCode];
         if (action) {
             this.actions[action] = true;
         }
+    },
+
+
+    onMouseMove: function (event) {
+        this.mouse.x = event.clientX;
+        this.mouse.y = event.clientY;
     },
 
     onKeyUp: function (event) {
