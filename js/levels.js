@@ -36,7 +36,8 @@ var level1 = {
                 width: 0.1,
                 height: 0.01
             },
-            destroyable: true
+            destroyable: false,
+            type: "block"
         },
         {
             position: {
@@ -47,7 +48,8 @@ var level1 = {
                 width: 0.1,
                 height: 0.01
             },
-            destroyable: false
+            destroyable: false,
+            type: "block"
         }
     ]
 };

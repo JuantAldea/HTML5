@@ -18,6 +18,22 @@ InputEngine = Class.extend({
             self.onMouseMove(event);
         });
 
+        document.getElementById('canvas').addEventListener('touchstart', function (event) {
+            self.onMouseDown(event);
+        });
+
+        document.getElementById('canvas').addEventListener('touchend', function (event) {
+            self.onMouseUp(event);
+        });
+
+        document.getElementById('canvas').addEventListener('mousedown', function (event) {
+            self.onMouseDown(event);
+        });
+
+        document.getElementById('canvas').addEventListener('mouseup', function (event) {
+            self.onMouseUp(event);
+        });
+
         document.getElementById('canvas').addEventListener('keydown', function (event) {
             self.onKeyDown(event);
         });
@@ -25,6 +41,14 @@ InputEngine = Class.extend({
         document.getElementById('canvas').addEventListener('keyup', function (event) {
             self.onKeyUp(event);
         });
+    },
+
+    onMouseDown: function(event){
+        this.actions['move-up'] = true;
+    },
+
+    onMouseUp: function(event){
+        this.actions['move-up'] = false;
     },
 
     onMouseMove: function (event) {
@@ -55,24 +79,3 @@ InputEngine = Class.extend({
         this.bindings[key] = action;
     }
 });
-
-function toggleFullScreen() {
-    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        }
-    } else {
-        if (document.cancelFullScreen) {
-            document.cancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-        }
-    }
-
-}

@@ -6,6 +6,7 @@ Game = Class.extend({
 
     inputEngine: null,
 
+
     init: function () {
 
     },
@@ -29,30 +30,64 @@ Game = Class.extend({
     },
 
     setup_walls: function () {
-        var wall_thickness = 2;
-        var fixDef = new b2FixtureDef();
-        fixDef.density = 1.0;
-        fixDef.friction = 0;
-        fixDef.restitution = 0.0;
-        var bodyDef = new b2BodyDef();
-        bodyDef.type = b2Body.b2_staticBody;
-        fixDef.shape = new b2PolygonShape();
 
-        fixDef.shape.SetAsBox(this.world.scaled_width / wall_thickness, wall_thickness / this.world.scale);
+        //ceiling
+        new Block({
+            position: {
+                x: 0.5,
+                y: 0
+            },
+            half_size: {
+                width: 0.5,
+                height: 0.01
+            },
+            destroyable: false,
+            type: "block"
+        });
 
-        bodyDef.position.Set(this.world.scaled_width / wall_thickness, wall_thickness / this.world.scale);
-        this.world.CreateBody(bodyDef).CreateFixture(fixDef);
+        //floor
+        new Block({
+            position: {
+                x: 0.5,
+                y: 1
+            },
+            half_size: {
+                width: 0.5,
+                height: 0.01
+            },
+            destroyable: false,
+            type: "block-floor"
+        });
+        //left wall
+        new Block({
+            position: {
+                x: 0,
+                y: 0.5
+            },
 
-        bodyDef.position.Set(this.world.scaled_width / wall_thickness, this.world.scaled_height - wall_thickness / this.world.scale);
-        this.world.CreateBody(bodyDef).CreateFixture(fixDef);
+            half_size: {
+                width: 0.003,
+                height: 0.5
+            },
 
-        fixDef.shape.SetAsBox(wall_thickness / this.world.scale, this.world.scaled_height / wall_thickness);
+            destroyable: false,
+            type: "block-floor"
+        });
 
-        bodyDef.position.Set(wall_thickness / this.world.scale, this.world.scaled_height / wall_thickness);
-        this.world.CreateBody(bodyDef).CreateFixture(fixDef);
+        new Block({
+            position: {
+                x: 1,
+                y: 0.5
+            },
 
-        bodyDef.position.Set(this.world.scaled_width - wall_thickness / this.world.scale, this.world.scaled_height / wall_thickness);
-        this.world.CreateBody(bodyDef).CreateFixture(fixDef);
+            half_size: {
+                width: 0.003,
+                height: 0.5
+            },
+
+            destroyable: false,
+            type: "block-floor"
+        });
     },
 
     setup_draw_debug: function () {
@@ -70,8 +105,14 @@ Game = Class.extend({
             var movement = new b2Vec2(0, 0);
             //var current_velocity = this.player.body.GetLinearVelocity();
             //movement.Add(current_velocity);
+            var spawnPoint = this.player.body.GetPosition();
             if (this.inputEngine.actions['move-up']) {
-
+                if (!harpoon) {
+                    var spawnPoint = this.player.body.GetPosition();
+                    spawnPoint.x /= GameWorld.scaled_width;
+                    spawnPoint.y /= GameWorld.scaled_height;;
+                    harpoon = new Rope({x: spawnPoint.x, y: spawnPoint.y});
+                }
             }
 
             if (this.inputEngine.actions['move-down']) {
