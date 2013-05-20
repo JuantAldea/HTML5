@@ -22,10 +22,9 @@ Bubble = PhysicsObject.extend({
         bodyDef.position.y = bubble.position.y;
 
         bodyDef.userData = {};
-        bodyDef.userData["name"] = bubble.name ? bubble.name : "bubble";
+        bodyDef.userData.name = bubble.name ? bubble.name : "bubble";
 
         this.parent(bodyDef, fixDef);
-        //console.log(this);
 
         this.body.ApplyImpulse(new b2Vec2(bubble.impulse.x, bubble.impulse.y), this.body.GetWorldCenter());
 

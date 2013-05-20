@@ -3,21 +3,26 @@ var player = null;
 var harpoon = null;
 
 window.onload = function () {
+
     var canvas = document.getElementById('canvas');
     canvas.focus();
-    GameWorld = new World();
-    var s = document.createElement("DIV");
-    s.appendChild(document.createTextNode(canvas.width));
-    s.appendChild(document.createElement("BR"));
-    s.appendChild(document.createTextNode(canvas.height));
-    document.body.appendChild(s);
-    var game = new Game();
-    game.world = GameWorld;
-    player = new Player();
-    game.player = player;
+    setTimeout(function () {
+        canvas.style.width = window.innerWidth;
+        canvas.style.height = window.innerHeight;
+        GameWorld = new World();
+        var s = document.createElement("DIV");
+        s.appendChild(document.createTextNode(canvas.width));
+        s.appendChild(document.createElement("BR"));
+        s.appendChild(document.createTextNode(canvas.height));
+        //document.body.appendChild(s);
+        var game = new Game();
+        game.world = GameWorld;
+        player = new Player();
+        game.player = player;
 
-    game.inputEngine = new InputEngine();
-    game.start();
+        game.inputEngine = new InputEngine();
+        game.start();
+    }, 50);
 };
 
 /*
