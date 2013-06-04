@@ -4,12 +4,13 @@
  * Time: 2:27 PM
  */
 
+
 RopeComponent = Block.extend({
     parentRope: null,
 
     init: function (properties, rope) {
         this.parentRope = rope;
-        properties.parentRope = rope;
+        properties.object = rope;
         properties.name = "rope";
         properties.type = "static";
 
@@ -19,7 +20,7 @@ RopeComponent = Block.extend({
 
         self.body.ShouldCollide = function (other) {
             var otherData = other.GetUserData();
-            if (otherData != null) {
+            if (otherData !== null) {
                 //if (otherData.name == "rope") return false;
                 //if (otherData.name == "player") return false;
             }
@@ -32,6 +33,9 @@ RopeComponent = Block.extend({
             }
             return true;
         };
+    },
+    onCollision: function(){
+      this.parentRope.onCollision();
     }
 });
 
@@ -46,13 +50,13 @@ Rope = Class.extend({
     speed: 1,
     halfHeight: 0,
     lastExpansionTime: Date.now(),
-    expansionTime: 25,
+    expansionTime: 15,
+    height: 0.005,
 
     init: function (position) {
-        var height = 0.025
-        this.halfHeight = height * 2.3;
+        this.halfHeight = this.height * 2.7;
         this.x = position.x;
-        this.y = position.y - height;
+        this.y = position.y - this.height;
         //this.y -= 0.02
         this.properties = {
             position: {
@@ -61,10 +65,10 @@ Rope = Class.extend({
             },
             half_size: {
                 width: 0.001,
-                height: height
+                height: this.height
             },
             destroyable: false,
-            parentRope: this
+            object: this
         };
         this.bodies.push(new RopeComponent(this.properties, this));
     },
@@ -88,11 +92,12 @@ Rope = Class.extend({
         this.markedForDestruction = true;
         for (var i = 0; i < this.bodies.length; i++) {
             GameWorld.DestroyBody(this.bodies[i].body);
+            delete this.bodies[i];
         }
         this.bodies = [];
     },
 
-    onTouch: function () {
+    onCollision: function () {
         this.destroy();
     }
 });

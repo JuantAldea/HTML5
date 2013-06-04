@@ -5,29 +5,29 @@
  */
 
 Bubble = PhysicsObject.extend({
-    lives: 2,
+    isSplit: false,
 
     init: function (bubble) {
-
         var fixDef = new b2FixtureDef();
         fixDef.density = 1.0;
         fixDef.friction = 0;
         fixDef.restitution = 1.0;
 
         var bodyDef = new b2BodyDef();
+        bodyDef.userData = copy(bubble);
         bodyDef.type = b2Body.b2_dynamicBody;
         fixDef.shape = new b2CircleShape(bubble.radius * GameWorld.scaled_height);
 
         bodyDef.position.x = bubble.position.x;
         bodyDef.position.y = bubble.position.y;
 
-        bodyDef.userData = {};
-        bodyDef.userData.name = bubble.name ? bubble.name : "bubble";
+
+        bodyDef.userData.object = this;
+        bodyDef.userData.name = bodyDef.userData.name ? bodyDef.userData.name : "bubble";
 
         this.parent(bodyDef, fixDef);
 
-        this.body.ApplyImpulse(new b2Vec2(bubble.impulse.x, bubble.impulse.y), this.body.GetWorldCenter());
-
+        this.body.ApplyImpulse(new b2Vec2(bodyDef.userData.impulse.x, bodyDef.userData.impulse.y), this.body.GetWorldCenter());
     },
 
     update: function () {
@@ -36,25 +36,31 @@ Bubble = PhysicsObject.extend({
 
 
     split: function () {
-        var bubble = {
-            radius: 1,
-            position: {
-                x: 0.5,
-                y: 0.5
-            },
-            impulse: {
-                x: 5,
-                y: 5
-            }
-        };
-        new Bubble(bubble);
-        new Bubble(bubble);
+        this.isSplit = true;
+        var bubble = this.bodyDef.userData;
+        var bubble1 = copy(bubble);
+        var bubble2 = copy(bubble);
+        bubble1.position = this.getPosition();
+        bubble1.radius *= 0.5;
+        bubble1.impulse.x = -bubble.impulse.x * 0.75;
+        bubble1.impulse.y = -bubble.impulse.y * 0.75;
+        GameWorld.spawnBubble(bubble1);
+
+        bubble2.position = this.getPosition();
+        bubble2.radius *= 0.5;
+        bubble2.impulse.x = bubble.impulse.x * 0.75;
+        bubble2.impulse.y = -bubble.impulse.y * 0.75;
+        GameWorld.spawnBubble(bubble2);
     },
 
-    onTouch: function (otherObject) {
-        this.lives -= 1;
-        if (this.lives >= 0) {
-            this.split();
+    onCollision: function (other) {
+        if (other == "rope" && !this.isSplit) {
+            if (this.bodyDef.userData.lives > 0) {
+                this.bodyDef.userData.lives--;
+                this.split();
+            }
+            GameWorld.DestroyBody(this.body);
+            RM.playsound("explosion");
         }
     }
 });

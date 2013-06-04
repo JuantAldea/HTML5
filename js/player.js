@@ -1,4 +1,7 @@
 Player = PhysicsObject.extend({
+    vulnerabilityCD: 2000,
+    lastLiveLoss: Date.now(),
+    lives: 3,
     position: {
         x: 0.5,
         y: 0.95
@@ -27,31 +30,47 @@ Player = PhysicsObject.extend({
         bodyDef.position.y = this.position.y;
         bodyDef.fixedRotation = true;
 
-        bodyDef.userData = {};
-        bodyDef.userData["name"] = "player";
+        bodyDef.userData = {
+            name: "player",
+            object: this
+        };
 
         this.parent(bodyDef, fixDef);
 
         /*
-        var self = this;
-        self.body.ShouldCollide = function (other) {
-            var otherData = other.GetUserData();
-            if (otherData != null) {
-                if (otherData.name == "rope") return false;
-            }
+         var self = this;
+         self.body.ShouldCollide = function (other) {
+         var otherData = other.GetUserData();
+         if (otherData != null) {
+         if (otherData.name == "rope") return false;
+         }
 
-            if (this.m_type != b2Body.b2_dynamicBody && other.m_type != b2Body.b2_dynamicBody) {
-                return false;
-            }
+         if (this.m_type != b2Body.b2_dynamicBody && other.m_type != b2Body.b2_dynamicBody) {
+         return false;
+         }
 
-            for (var jn = self.body.m_jointList; jn; jn = jn.next) {
-                if (jn.other == other)
-                    if (jn.joint.m_collideConnected == false) {
-                        return false;
-                    }
+         for (var jn = self.body.m_jointList; jn; jn = jn.next) {
+         if (jn.other == other)
+         if (jn.joint.m_collideConnected == false) {
+         return false;
+         }
+         }
+         return true;
+         };*/
+    },
+
+    onCollision: function (object) {
+        if (object == "bubble") {
+            var now = Date.now();
+            if (now - this.lastLiveLoss >= this.vulnerabilityCD) {
+                this.lastLiveLoss = now;
+                this.lives--;
+                if (this.lives < 0) {
+                    GameWorld.togglePause();
+                }
+                RM.playsound("hit");
             }
-            return true;
-        };*/
+        }
     }
 });
 

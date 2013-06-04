@@ -1,4 +1,6 @@
 World = Class.extend({
+    paused: false,
+
     canvas: null,
 
     width: window.innerWidth,
@@ -16,6 +18,10 @@ World = Class.extend({
     gravity: new b2Vec2(0, 20),
 
     bodiesToDestroy: [],
+    lastStep: Date.now(),
+
+    newBubbles: [],
+    bubbles: [],
 
     init: function () {
         this.canvas = document.getElementById("canvas");
@@ -26,39 +32,90 @@ World = Class.extend({
         this.world = new b2World(this.gravity, false);
 
         var listener = new Box2D.Dynamics.b2ContactListener;
-        listener.BeginContact = function (contact) {
-            //console.log(contact.GetFixtureA().GetBody().GetUserData());
-        }
-        listener.EndContact = function (contact) {
-            //console.log(contact.GetFixtureA().GetBody().GetUserData());
-        }
-        listener.PostSolve = function (contact, impulse) {
 
-        }
-        listener.PreSolve = function (contact, oldManifold) {
+        listener.BeginContact = function (contact) {
             function compare(type1, type2, obj1, obj2) {
                 return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
             }
 
             var uDA = contact.m_fixtureA.GetBody().GetUserData();
             var uDB = contact.m_fixtureB.GetBody().GetUserData();
-            //console.log(uDA.type, uDB.type);
+            uDA = uDA['name'];
+            uDB = uDB['name'];
+            if (uDA != null && uDB != null) {
+                if (compare("rope", "block", uDA, uDB)) {
+                    //console.log("pollaca");
+                }
+
+            }
+        };
+
+        listener.EndContact = function (contact) {
+            function compare(type1, type2, obj1, obj2) {
+                return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
+            }
+
+            var uDA = contact.m_fixtureA.GetBody().GetUserData();
+            var uDB = contact.m_fixtureB.GetBody().GetUserData();
+            uDA = uDA['name'];
+            uDB = uDB['name'];
+
+            if (uDA != null && uDB != null) {
+                if (compare("block", "rope", uDA, uDB)) {
+                    //console.log("pollaca");
+                }
+            }
+        };
+
+        listener.PostSolve = function (contact, impulse) {
+            function compare(type1, type2, obj1, obj2) {
+                return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
+            }
+
+            var uDA = contact.m_fixtureA.GetBody().GetUserData();
+            var uDB = contact.m_fixtureB.GetBody().GetUserData();
             if (uDA != null && uDB != null) {
                 uDA = uDA['name'];
                 uDB = uDB['name'];
-                //console.log(uDA, uDB);
+                if (compare("rope", "bubble", uDA, uDB)) {
+                    console.log("pollaca");
+                }
+            }
+        };
+
+        listener.PreSolve = function (contact, oldManifold) {
+            function compare(type1, type2, obj1, obj2) {
+                return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
+            }
+
+            if (!contact.IsTouching()) {
+                return;
+            }
+
+            var uDA = contact.m_fixtureA.GetBody().GetUserData();
+            var uDB = contact.m_fixtureB.GetBody().GetUserData();
+            if (uDA != null && uDB != null) {
+                uDA = uDA['name'];
+                uDB = uDB['name'];
                 if (compare("rope", "rope", uDA, uDB)) {
                     contact.SetEnabled(false);
                 } else if (compare("rope", "player", uDA, uDB)) {
                     contact.SetEnabled(false);
-                } else if (compare("rope", "bubble", uDA, uDB)) {
-                    contact.SetEnabled(false);
                 } else if (compare("player", "bubble", uDA, uDB)) {
+                    player.onCollision("bubble");
                     contact.SetEnabled(false);
+                    //} else if (compare("player", "block-floor", uDA, uDB)) {
+                    //} else if (compare("rope", "block", uDA, uDB)) {
+                    //} else if (compare("rope", "bubble", uDA, uDB)) {
+                } else {
+                    contact.m_fixtureA.GetBody().GetUserData().object.onCollision(uDB);
+                    contact.m_fixtureB.GetBody().GetUserData().object.onCollision(uDA);
+                    //contact.SetEnabled(false);
+                    //console.log(uDA, uDB);
                 }
             }
 
-        }
+        };
         this.world.SetContactListener(listener);
     },
 
@@ -67,17 +124,47 @@ World = Class.extend({
     },
 
     DestroyBody: function (body) {
-        this.bodiesToDestroy.push(body);
+        if (this.bodiesToDestroy.indexOf(body) == -1) {
+            this.bodiesToDestroy.push(body);
+        }
+    },
+
+    spawnBubble: function (object) {
+        this.newBubbles.push(object);
+    },
+
+    togglePause: function () {
+        this.paused = !this.paused;
     },
 
     update: function () {
-        this.world.Step(1 / 60, 10, 10);
-        this.world.DrawDebugData();
-        this.world.ClearForces();
+        if (!this.paused) {
+            var currentTime = Date.now();
+            var dt = currentTime - this.lastStep;
+            var steps = Math.floor(dt / 16.667);
+            this.lastStep += steps * 16.667;
+            for (var i = 0; i < steps; i++) {
+                this.world.Step(1.0 / 60.0, 10, 10);
+            }
 
-        for (var i = 0; i < this.bodiesToDestroy.length; i++) {
-            this.world.DestroyBody(this.bodiesToDestroy[i]);
+            this.world.DrawDebugData();
+            this.world.ClearForces();
+
+            for (var i = 0; i < this.newBubbles.length; i++) {
+                this.bubbles.push(new Bubble(this.newBubbles[i]));
+            }
+
+            this.newBubbles = [];
+
+            for (var i = 0; i < this.bodiesToDestroy.length; i++) {
+                this.bubbles.erase(this.bodiesToDestroy[i].GetUserData().object);
+                this.world.DestroyBody(this.bodiesToDestroy[i]);
+            }
+            this.bodiesToDestroy = [];
+
+            if (this.bubbles.length == 0) {
+                this.togglePause();
+            }
         }
-        this.bodiesToDestroy = [];
     }
 });

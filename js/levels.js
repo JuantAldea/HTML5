@@ -2,26 +2,28 @@ var levels = [];
 
 var level1 = {
     bubbles: [
+        /*{
+         lives: 2,
+         radius: 0.05,
+         position: {
+         x: 0.5,
+         y: 0.5
+         },
+         impulse: {
+         x: 5,
+         y: 5
+         }
+         },*/
         {
-            radius: 0.05,
-            position: {
-                x: 0.5,
-                y: 0.5
-            },
-            impulse: {
-                x: 5,
-                y: 5
-            }
-        },
-        {
+            lives: 1,
             radius: 0.05,
             position: {
                 x: 0.2,
                 y: 0.2
             },
             impulse: {
-                x: 50,
-                y: 50
+                x: 5,
+                y: 5
             }
         }
     ],

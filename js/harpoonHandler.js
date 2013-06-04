@@ -14,9 +14,13 @@ HarpoonHandler = Class.extend({
     },
 
     spawnHarpoon: function (x, y) {
+        if (this.aliveHarpoons.length > 2){
+            return;
+        }
+
         var now = Date.now();
 
-        if (this.lastShootTime + this.cooldown > now){
+        if (this.lastShootTime + this.cooldown > now) {
             return;
         }
         this.lastShootTime = now;

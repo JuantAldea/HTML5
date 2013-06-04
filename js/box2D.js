@@ -4382,7 +4382,7 @@ Box2D.postDefs = [];
     }
     b2Body.prototype.CreateFixture = function(def) {
         if (this.m_world.IsLocked() == true) {
-            Logger.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
+            console.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
             return null;
         }
         var fixture = new b2Fixture();
@@ -4411,7 +4411,7 @@ Box2D.postDefs = [];
     }
     b2Body.prototype.DestroyFixture = function(fixture) {
         if (this.m_world.IsLocked() == true) {
-            Logger.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
+            console.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
             return;
         }
         var node = this.m_fixtureList;
@@ -4455,7 +4455,7 @@ Box2D.postDefs = [];
             angle = 0;
         var f;
         if (this.m_world.IsLocked() == true) {
-            Logger.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
+            console.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
             return;
         }
         this.m_xf.R.Set(angle);
@@ -4646,7 +4646,7 @@ Box2D.postDefs = [];
     b2Body.prototype.SetMassData = function(massData) {
         b2Settings.b2Assert(this.m_world.IsLocked() == false);
         if (this.m_world.IsLocked() == true) {
-            Logger.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
+            console.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
             return;
         }
         if (this.m_type != b2Body.b2_dynamicBody) {
@@ -5735,7 +5735,7 @@ Box2D.postDefs = [];
     }
     b2World.prototype.CreateBody = function(def) {
         if (this.IsLocked() == true) {
-            Logger.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
+            console.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
             return null;
         }
         var b = new b2Body(def, this);
@@ -5750,9 +5750,10 @@ Box2D.postDefs = [];
     }
     b2World.prototype.DestroyBody = function(b) {
         if (this.IsLocked() == true) {
-            Logger.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
+            console.log("TRIED TO EDIT PHYSICS WHILE WORLD IS LOCKED!");
             return;
         }
+
         var jn = b.m_jointList;
         while (jn) {
             var jn0 = jn;
@@ -5795,7 +5796,8 @@ Box2D.postDefs = [];
         }
         if (b == this.m_bodyList) {
             this.m_bodyList = b.m_next;
-        }--this.m_bodyCount;
+        }
+        --this.m_bodyCount;
     }
     b2World.prototype.CreateJoint = function(def) {
         var j = b2Joint.Create(def, null);

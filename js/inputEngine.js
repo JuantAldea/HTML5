@@ -14,7 +14,6 @@ InputEngine = Class.extend({
         this.bind(65, 'move-left');
         this.bind(83, 'move-down');
         this.bind(68, 'move-right');
-
         /*
          this.bind(38, 'move-up');
          this.bind(37, 'move-left');

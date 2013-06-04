@@ -6,7 +6,6 @@
 
 Block = PhysicsObject.extend({
     half_width: 0,
-
     half_height: 0,
 
     init: function (block) {
@@ -23,7 +22,7 @@ Block = PhysicsObject.extend({
         //bodyDef.type = b2Body.b2_dynamicBody;
         bodyDef.position.x = block.position.x;
         bodyDef.position.y = block.position.y;
-
+        block.object = this;
         bodyDef.userData = block;
 
         this.parent(bodyDef, fixDef);
@@ -39,10 +38,13 @@ Block = PhysicsObject.extend({
             }
             var otherData = other.GetUserData();
             if (otherData["parentRope"]) {
-                otherData.parentRope.destroy();
+
             }
             return true;
         };
+    },
+
+    onCollision: function(){
     },
 
     destroy: function () {

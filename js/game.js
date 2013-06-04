@@ -20,7 +20,7 @@ Game = Class.extend({
 
     setup_bubbles: function (bubbles) {
         for (var bubbleIndex = 0; bubbleIndex < bubbles.length; bubbleIndex++) {
-            new Bubble(bubbles[bubbleIndex]);
+            GameWorld.spawnBubble(bubbles[bubbleIndex]);
         }
     },
 
@@ -40,7 +40,7 @@ Game = Class.extend({
             },
             half_size: {
                 width: 0.5,
-                height: 0.01
+                height: 0.003
             },
             destroyable: false,
             type: 'static',
@@ -55,7 +55,7 @@ Game = Class.extend({
             },
             half_size: {
                 width: 0.5,
-                height: 0.01
+                height: 0.003
             },
             destroyable: false,
             type: 'static',

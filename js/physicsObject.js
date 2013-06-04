@@ -20,6 +20,19 @@ PhysicsObject = Class.extend({
         this.body.CreateFixture(this.fixDef);
     },
 
+    getPosition: function () {
+        var p = this.body.GetPosition();
+        return {
+            x: p.x / GameWorld.scaled_width,
+            y: p.y / GameWorld.scaled_height
+        };
+    },
+
     update: function () {
+    },
+
+    onCollision: function () {
+
     }
-});
+})
+;

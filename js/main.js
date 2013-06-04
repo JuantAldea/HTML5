@@ -1,6 +1,6 @@
+"use strict";
 var GameWorld = null;
 var player = null;
-var harpoon = null;
 
 window.onload = function () {
 
@@ -19,7 +19,6 @@ window.onload = function () {
         game.world = GameWorld;
         player = new Player();
         game.player = player;
-
         game.inputEngine = new InputEngine();
         game.start();
     }, 50);
