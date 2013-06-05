@@ -2,6 +2,7 @@ World = Class.extend({
     paused: false,
 
     canvas: null,
+    context: null,
 
     width: window.innerWidth,
 
@@ -25,6 +26,7 @@ World = Class.extend({
 
     init: function () {
         this.canvas = document.getElementById("canvas");
+        this.context = this.canvas.getContext("2d");
         this.canvas.width = this.width;
         this.canvas.height = this.height;
         this.scaled_width = this.width / this.scale;
@@ -46,7 +48,6 @@ World = Class.extend({
                 if (compare("rope", "block", uDA, uDB)) {
                     //console.log("pollaca");
                 }
-
             }
         };
 
@@ -143,10 +144,13 @@ World = Class.extend({
             var dt = currentTime - this.lastStep;
             var steps = Math.floor(dt / 16.667);
             this.lastStep += steps * 16.667;
+
             for (var i = 0; i < steps; i++) {
                 this.world.Step(1.0 / 60.0, 10, 10);
             }
 
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.draw();
             this.world.DrawDebugData();
             this.world.ClearForces();
 
@@ -156,15 +160,25 @@ World = Class.extend({
 
             this.newBubbles = [];
 
+
+
             for (var i = 0; i < this.bodiesToDestroy.length; i++) {
                 this.bubbles.erase(this.bodiesToDestroy[i].GetUserData().object);
                 this.world.DestroyBody(this.bodiesToDestroy[i]);
             }
+
             this.bodiesToDestroy = [];
 
             if (this.bubbles.length == 0) {
                 this.togglePause();
             }
+        }
+    },
+
+    draw: function () {
+        this.context.drawImage(RM.resources["bg1"], 0, 0, this.canvas.width, this.canvas.height)
+        for (var i = 0; i < this.bubbles.length; i++) {
+            this.bubbles[i].draw(this.context);
         }
     }
 });

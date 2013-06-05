@@ -1,0 +1,21 @@
+block.js:23:        bodyDef.type = block.type == 'kinematic' ? b2Body.b2_kinematicBody : block.type == 'dynamic' ? b2Body.b2_dynamicBody : b2Body.b2_staticBody;
+block.js:24:        //bodyDef.type = b2Body.b2_dynamicBody;
+
+bubble.js:18:        bodyDef.type = b2Body.b2_dynamicBody;
+chain.js:12:        this.bodyDef.type = b2Body.b2_dynamicBody;
+chainLink.js:11:        bodyDef.type = b2Body.b2_dynamicBody;
+
+game.js:46:            type: 'static',
+game.js:61:            type: 'static',
+game.js:77:            type: 'static',
+game.js:93:            type: 'static',
+levels.js:40:            type: 'static',
+levels.js:53:            type: 'static',
+
+
+player.js:25:        bodyDef.type = b2Body.b2_dynamicBody;
+
+rope.js:14:        properties["type"] = "dynamic";
+world.js:39:            function compare(type1, type2, obj1, obj2) {
+world.js:40:                return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
+world.js:45:            //console.log(uDA.type, uDB.type);

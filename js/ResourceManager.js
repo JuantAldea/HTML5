@@ -112,9 +112,14 @@ var RM = new ResourceManager();
 
 var resources = [
     {
-        name: "icon",
+        name: "bg1",
         type: "img",
-        url: "./apple-touch-icon.png"
+        url: "./background1.png"
+    },
+    {
+        name: "sprites",
+        type: "img",
+        url: "./sprites.png"
     },
     {
         name: "explosion",

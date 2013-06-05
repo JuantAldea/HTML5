@@ -21,9 +21,11 @@ Bubble = PhysicsObject.extend({
         bodyDef.position.x = bubble.position.x;
         bodyDef.position.y = bubble.position.y;
 
-
         bodyDef.userData.object = this;
         bodyDef.userData.name = bodyDef.userData.name ? bodyDef.userData.name : "bubble";
+
+        var color = Math.floor((Math.random() * 10) % Sprites.bubbles.length);
+        bodyDef.userData.sprite = bodyDef.userData.sprite ? bodyDef.userData.sprite : Sprites[Sprites.bubbles[color]];
 
         this.parent(bodyDef, fixDef);
 
@@ -62,5 +64,13 @@ Bubble = PhysicsObject.extend({
             GameWorld.DestroyBody(this.body);
             RM.playsound("explosion");
         }
+    },
+
+    draw: function (ctx) {
+        var scaledRadius = this.bodyDef.userData.radius * GameWorld.scaled_height * 30;
+        var px = this.body.GetPosition().x * 30 - scaledRadius;
+        var py = this.body.GetPosition().y * 30 - scaledRadius;
+        var sprite = this.bodyDef.userData.sprite;
+        ctx.drawImage(RM.resources["sprites"], sprite.frame.x, sprite.frame.y, sprite.frame.w,sprite.frame.h , px, py, scaledRadius * 2, scaledRadius * 2);
     }
 });
