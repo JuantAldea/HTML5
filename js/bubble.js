@@ -25,7 +25,7 @@ Bubble = PhysicsObject.extend({
         bodyDef.userData.name = bodyDef.userData.name ? bodyDef.userData.name : "bubble";
 
         var color = Math.floor((Math.random() * 10) % Sprites.bubbles.length);
-        bodyDef.userData.sprite = bodyDef.userData.sprite ? bodyDef.userData.sprite : Sprites[Sprites.bubbles[color]];
+        bodyDef.userData.sprite = bodyDef.userData.sprite ? bodyDef.userData.sprite : Sprites.frames[[Sprites.bubbles[color]]];
 
         this.parent(bodyDef, fixDef);
 

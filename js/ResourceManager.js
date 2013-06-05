@@ -114,22 +114,22 @@ var resources = [
     {
         name: "bg1",
         type: "img",
-        url: "./background1.png"
+        url: "./img/background1.png"
     },
     {
         name: "sprites",
         type: "img",
-        url: "./sprites.png"
+        url: "./img/sprites.png"
     },
     {
         name: "explosion",
         type: "sound",
-        url: "./explosion.wav"
+        url: "./sound/explosion.wav"
     },
     {
         name: "hit",
         type: "sound",
-        url: "./hit.wav"
+        url: "./sound/hit.wav"
     }
 ];
 

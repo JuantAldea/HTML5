@@ -26,12 +26,11 @@ Game = Class.extend({
 
     setup_blocks: function (blocks) {
         for (var i = 0; i < blocks.length; i++) {
-            new Block(blocks[i])
+            GameWorld.spawnBlock(blocks[i]);
         }
     },
 
     setup_walls: function () {
-
         //ceiling
         new Block({
             position: {
@@ -99,7 +98,7 @@ Game = Class.extend({
         var debugDraw = new b2DebugDraw();
         debugDraw.SetSprite(this.world.canvas.getContext("2d"));
         debugDraw.SetDrawScale(this.world.scale);
-        debugDraw.SetFillAlpha(0.5);
+        debugDraw.SetFillAlpha(0);
         debugDraw.SetLineThickness(1.0);
         debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
         this.world.world.SetDebugDraw(debugDraw);
@@ -107,7 +106,6 @@ Game = Class.extend({
 
     update: function () {
         if (this.inputEngine) {
-
             if (this.inputEngine.actions['fire']) {
                 var spawnPoint = this.player.body.GetPosition();
                 spawnPoint.x /= GameWorld.scaled_width;
@@ -118,7 +116,6 @@ Game = Class.extend({
             var movement = new b2Vec2(0, 0);
 
             if (this.inputEngine.actions['move-up']) {
-
             }
 
             if (this.inputEngine.actions['move-down']) {
@@ -140,8 +137,11 @@ Game = Class.extend({
 
             this.player.body.SetLinearVelocity(movement);
         }
+
         this.harpoonHandler.update();
         this.world.update();
+        this.world.draw(true);
+
     },
 
     start: function () {

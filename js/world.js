@@ -23,6 +23,7 @@ World = Class.extend({
 
     newBubbles: [],
     bubbles: [],
+    blocks: [],
 
     init: function () {
         this.canvas = document.getElementById("canvas");
@@ -117,6 +118,7 @@ World = Class.extend({
             }
 
         };
+
         this.world.SetContactListener(listener);
     },
 
@@ -130,8 +132,12 @@ World = Class.extend({
         }
     },
 
-    spawnBubble: function (object) {
-        this.newBubbles.push(object);
+    spawnBubble: function (bubble) {
+        this.newBubbles.push(bubble);
+    },
+
+    spawnBlock: function (block) {
+        this.blocks.push(new Block(block));
     },
 
     togglePause: function () {
@@ -150,8 +156,6 @@ World = Class.extend({
             }
 
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.draw();
-            this.world.DrawDebugData();
             this.world.ClearForces();
 
             for (var i = 0; i < this.newBubbles.length; i++) {
@@ -159,7 +163,6 @@ World = Class.extend({
             }
 
             this.newBubbles = [];
-
 
 
             for (var i = 0; i < this.bodiesToDestroy.length; i++) {
@@ -175,10 +178,18 @@ World = Class.extend({
         }
     },
 
-    draw: function () {
+    draw: function (debug) {
         this.context.drawImage(RM.resources["bg1"], 0, 0, this.canvas.width, this.canvas.height)
         for (var i = 0; i < this.bubbles.length; i++) {
             this.bubbles[i].draw(this.context);
+        }
+
+        for (var i = 0; i < this.blocks.length; i++) {
+            this.blocks[i].draw(this.context);
+        }
+
+        if (debug) {
+            this.world.DrawDebugData();
         }
     }
 });

@@ -23,6 +23,11 @@ Block = PhysicsObject.extend({
         bodyDef.position.x = block.position.x;
         bodyDef.position.y = block.position.y;
         block.object = this;
+
+        var color = Math.floor((Math.random() * 10) % Sprites.blocks.length);
+
+        block.sprite = block.sprite ? block.sprite : Sprites.frames[[Sprites.blocks[color]]];
+
         bodyDef.userData = block;
 
         this.parent(bodyDef, fixDef);
@@ -44,9 +49,22 @@ Block = PhysicsObject.extend({
         };
     },
 
-    onCollision: function(){
+    onCollision: function () {
     },
 
     destroy: function () {
+    },
+
+    draw: function (ctx) {
+        var px = this.body.GetPosition().x * 30;
+        var py = this.body.GetPosition().y * 30;
+        var sprite = this.bodyDef.userData.sprite;
+        var half_height = this.half_height * 30 * GameWorld.scaled_height;
+        var half_width = this.half_width * 30 * GameWorld.scaled_width;
+        var frame = sprite.frame;
+        ctx.drawImage(RM.resources["sprites"], frame.x, frame.y,
+            frame.w, frame.h,
+            px - half_width, py - half_height,
+            half_width * 2, half_height * 2);
     }
 });
