@@ -120,7 +120,7 @@ ResourceManager.prototype.loadCompleted = function () {
             document.getElementsByTagName("head")[0].appendChild(file);
         }
     }
-    document.getElementById("loading").style.display = "none";
+    document.getElementById("circular3dG").style.display = "none";
     document.getElementById("canvas").style.display = "";
 }
 
