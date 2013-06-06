@@ -3,15 +3,13 @@
     <meta charset="utf-8">
     <title>HTML5 Pang</title>
     <meta name="view_port" content="width=device-width">
-    <!--<link rel="stylesheet" href="css/main.css">-->
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!--
-    <script src="js/core.js"></script>
     <script src="js/sprites.js"></script>
     <script src="js/levels.js"></script>
     <script src="js/box2D.js"></script>
     <script src="js/box2Dshortcuts.js"></script>
 
+    <script src="js/core.js"></script>
     <script src="js/ResourceManager.js"></script>
     <script src="js/physicsObject.js"></script>
 
@@ -23,10 +21,29 @@
     <script src="js/inputEngine.js"></script>
     <script src="js/player.js"></script>
     <script src="js/chain.js"></script>
+
     <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
     -->
+    <!--
+    <script>
+        var request = new XMLHttpRequest();
+        request.open('GET', "js/ResourceManager.js", true);
+        request.onload = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var file = document.createElement('script');
+                file.setAttribute("type", "text/javascript");
+                file.innerHTML = this.response;
+                document.getElementsByTagName("head")[0].appendChild(file);
+            }
+        }
+        request.send();
+    </script>
+      -->
 
     <script src="js/ResourceManager.js"></script>
+
+
     <style>
         * {
             padding: 0;
@@ -34,6 +51,7 @@
             overflow: hidden;
         }
     </style>
+
 </head>
 <body>
 

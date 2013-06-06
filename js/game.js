@@ -60,6 +60,7 @@ Game = Class.extend({
             type: 'static',
             name: "block-floor"
         });
+
         //left wall
         new Block({
             position: {
@@ -107,7 +108,8 @@ Game = Class.extend({
     update: function () {
         if (this.inputEngine) {
             if (this.inputEngine.actions['fire']) {
-                var spawnPoint = this.player.body.GetPosition();
+                var position = this.player.body.GetPosition();
+                var spawnPoint = new b2Vec2(position.x, position.y);
                 spawnPoint.x /= GameWorld.scaled_width;
                 spawnPoint.y /= GameWorld.scaled_height;
                 this.harpoonHandler.spawnHarpoon(spawnPoint.x, spawnPoint.y);
