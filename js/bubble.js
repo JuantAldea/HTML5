@@ -66,9 +66,9 @@ Bubble = PhysicsObject.extend({
                 this.split();
             }
             GameWorld.DestroyBody(this.body);
-            RM.playsound("explosion");
+            RM.playSound("explosion");
         } else if (other == "block" || other == "block-floor") {
-            RM.playsound("bounce");
+            RM.playSound("bounce");
         }
     },
 

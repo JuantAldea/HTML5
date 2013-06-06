@@ -2,8 +2,7 @@
 var GameWorld = null;
 var player = null;
 
-window.onload = function () {
-
+function main() {
     var canvas = document.getElementById('canvas');
     canvas.focus();
     setTimeout(function () {
@@ -24,6 +23,7 @@ window.onload = function () {
     }, 50);
 };
 
+main();
 /*
  function init() {
  //window.setInterval(update, 1000 / 60);

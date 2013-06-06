@@ -8,14 +8,7 @@ State = Class.extend({
     },
 
     draw: function () {
-        //var frame = Sprites.frames["left-standing"].frame;
-        //this.frameIndex = (this.frameIndex + 1) % (this.frames.length * 5);
         this.frameIndex++;
-
-
-        //0, 1, 2, 3, 4
-        //5, 6, 7, 8, 9
-        //10, 11, 12, 13, 14
         var frames = 10;
         this.frameIndex = this.frameIndex < (this.frames.length * frames) ? this.frameIndex : 0
         var p = Math.floor(this.frameIndex / frames);
@@ -167,9 +160,10 @@ Player = PhysicsObject.extend({
         half_height: 3
     },
     linear_velocity: 10,
-    velocity: new b2Vec2(0, 0),
+    velocity: null,
 
     init: function () {
+        this.velocity = new b2Vec2(0, 0);
         this.STATE_FRONT_IDLE = new IdleFront(this);
         this.STATE_LEFT_IDLE = new IdleLeft(this);
         this.STATE_RIGHT_IDLE = new IdleRight(this);
@@ -210,7 +204,7 @@ Player = PhysicsObject.extend({
                 if (this.lives < 0) {
                     GameWorld.togglePause();
                 }
-                RM.playsound("hit");
+                RM.playSound("hit");
             }
         }
     },

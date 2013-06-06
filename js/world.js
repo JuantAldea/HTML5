@@ -16,7 +16,7 @@ World = Class.extend({
 
     world: null,
 
-    gravity: new b2Vec2(0, 20),
+    gravity: null,
 
     bodiesToDestroy: [],
     lastStep: Date.now(),
@@ -26,6 +26,7 @@ World = Class.extend({
     blocks: [],
 
     init: function () {
+        this.gravity = new b2Vec2(0, 20);
         this.canvas = document.getElementById("canvas");
         this.context = this.canvas.getContext("2d");
         this.canvas.width = this.width;
