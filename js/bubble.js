@@ -15,6 +15,7 @@ Bubble = PhysicsObject.extend({
 
         var bodyDef = new b2BodyDef();
         bodyDef.userData = copy(bubble);
+        console.log(bodyDef.userData.impulse);
         bodyDef.type = b2Body.b2_dynamicBody;
         fixDef.shape = new b2CircleShape(bubble.radius * GameWorld.scaled_height);
 
@@ -28,8 +29,12 @@ Bubble = PhysicsObject.extend({
         bodyDef.userData.sprite = bodyDef.userData.sprite ? bodyDef.userData.sprite : Sprites.frames[[Sprites.bubbles[color]]];
 
         this.parent(bodyDef, fixDef);
-
-        this.body.ApplyImpulse(new b2Vec2(bodyDef.userData.impulse.x, bodyDef.userData.impulse.y), this.body.GetWorldCenter());
+        console.log(GameWorld.scaled_width, GameWorld.scaled_height);
+        this.body.ApplyImpulse(
+            new b2Vec2(
+                bodyDef.userData.impulse.x * GameWorld.scaled_width * 0.25 * bubble.radius * GameWorld.scaled_height,
+                bodyDef.userData.impulse.y * GameWorld.scaled_height * 0.25 * bubble.radius * GameWorld.scaled_height),
+            this.body.GetWorldCenter());
     },
 
     update: function () {
@@ -44,14 +49,13 @@ Bubble = PhysicsObject.extend({
         var bubble2 = copy(bubble);
         bubble1.position = this.getPosition();
         bubble1.radius *= 0.5;
-        bubble1.impulse.x = -bubble.impulse.x * 0.75;
-        bubble1.impulse.y = -bubble.impulse.y * 0.75;
+        bubble1.impulse.x = -bubble.impulse.x;
+        bubble1.impulse.y = -bubble.impulse.y;
         GameWorld.spawnBubble(bubble1);
-
         bubble2.position = this.getPosition();
         bubble2.radius *= 0.5;
-        bubble2.impulse.x = bubble.impulse.x * 0.75;
-        bubble2.impulse.y = -bubble.impulse.y * 0.75;
+        bubble2.impulse.x = bubble.impulse.x;
+        bubble2.impulse.y = -bubble.impulse.y;
         GameWorld.spawnBubble(bubble2);
     },
 
@@ -63,6 +67,8 @@ Bubble = PhysicsObject.extend({
             }
             GameWorld.DestroyBody(this.body);
             RM.playsound("explosion");
+        } else if (other == "block" || other == "block-floor") {
+            RM.playsound("bounce");
         }
     },
 
@@ -71,6 +77,6 @@ Bubble = PhysicsObject.extend({
         var px = this.body.GetPosition().x * 30 - scaledRadius;
         var py = this.body.GetPosition().y * 30 - scaledRadius;
         var sprite = this.bodyDef.userData.sprite;
-        ctx.drawImage(RM.resources["sprites"], sprite.frame.x, sprite.frame.y, sprite.frame.w,sprite.frame.h , px, py, scaledRadius * 2, scaledRadius * 2);
+        ctx.drawImage(RM.resources["sprites"], sprite.frame.x, sprite.frame.y, sprite.frame.w, sprite.frame.h, px, py, scaledRadius * 2, scaledRadius * 2);
     }
 });

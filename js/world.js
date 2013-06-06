@@ -80,7 +80,7 @@ World = Class.extend({
                 uDA = uDA['name'];
                 uDB = uDB['name'];
                 if (compare("rope", "bubble", uDA, uDB)) {
-                    console.log("pollaca");
+
                 }
             }
         };

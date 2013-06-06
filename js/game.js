@@ -116,6 +116,7 @@ Game = Class.extend({
             var movement = new b2Vec2(0, 0);
 
             if (this.inputEngine.actions['move-up']) {
+
             }
 
             if (this.inputEngine.actions['move-down']) {
@@ -123,16 +124,20 @@ Game = Class.extend({
             }
 
             if (this.inputEngine.actions['move-left']) {
-                movement.x += -0.5;
+                movement.x += -1;
+                this.player.left();
             }
 
             if (this.inputEngine.actions['move-right']) {
-                movement.x += 0.5;
+                movement.x += 1;
+                this.player.right();
             }
 
             if (movement.x !== 0 || movement.y !== 0) {
                 movement.Normalize();
                 movement.Multiply(self.player.linear_velocity);
+            } else {
+                this.player.stop();
             }
 
             this.player.body.SetLinearVelocity(movement);
@@ -141,6 +146,7 @@ Game = Class.extend({
         this.harpoonHandler.update();
         this.world.update();
         this.world.draw(true);
+        this.player.draw();
 
     },
 

@@ -127,6 +127,11 @@ var resources = [
         url: "./sound/explosion.wav"
     },
     {
+        name: "bounce",
+        type: "sound",
+        url: "./sound/bounce.wav"
+    },
+    {
         name: "hit",
         type: "sound",
         url: "./sound/hit.wav"
