@@ -112,6 +112,8 @@ ResourceManager.prototype.loadFinished = function () {
 }
 
 ResourceManager.prototype.loadCompleted = function () {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("canvas").style.display = "";
     for (var i = 0; i < resources.length; i++) {
         if (resources[i].type == "script") {
             var file = document.createElement('script');

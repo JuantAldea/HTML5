@@ -109,9 +109,7 @@ Game = Class.extend({
         if (this.inputEngine) {
             if (this.inputEngine.actions['fire']) {
                 var position = this.player.body.GetPosition();
-                var spawnPoint = new b2Vec2(position.x, position.y);
-                spawnPoint.x /= GameWorld.scaled_width;
-                spawnPoint.y /= GameWorld.scaled_height;
+                var spawnPoint = new b2Vec2(position.x / GameWorld.scaled_width, position.y / GameWorld.scaled_height);
                 this.harpoonHandler.spawnHarpoon(spawnPoint.x, spawnPoint.y);
             }
 
@@ -149,7 +147,6 @@ Game = Class.extend({
         this.world.update();
         this.world.draw(true);
         this.player.draw();
-
     },
 
     start: function () {
