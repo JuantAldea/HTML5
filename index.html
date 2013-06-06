@@ -25,23 +25,24 @@
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
     -->
-    <!--
-    <script>
-        var request = new XMLHttpRequest();
-        request.open('GET', "js/ResourceManager.js", true);
-        request.onload = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var file = document.createElement('script');
-                file.setAttribute("type", "text/javascript");
-                file.innerHTML = this.response;
-                document.getElementsByTagName("head")[0].appendChild(file);
-            }
-        }
-        request.send();
-    </script>
-      -->
 
-    <script src="js/ResourceManager.js"></script>
+    <script>
+        window.onload = function () {
+            var request = new XMLHttpRequest();
+            request.open('GET', "js/ResourceManager.js", true);
+            request.onload = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var file = document.createElement('script');
+                    file.setAttribute("type", "text/javascript");
+                    file.innerHTML = this.response;
+                    document.getElementsByTagName("head")[0].appendChild(file);
+                }
+            }
+            request.send();
+        }
+    </script>
+
+    <!--<script src="js/ResourceManager.js"></script>-->
 
 
     <style>
