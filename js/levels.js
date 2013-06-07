@@ -10,7 +10,7 @@ var level1 = {
                 y: 0.5
             },
             impulse: {
-                x: 0,
+                x: 1,
                 y: 1
             }
         },
@@ -22,7 +22,7 @@ var level1 = {
                 y: 0.2
             },
             impulse: {
-                x: 0,
+                x: 1,
                 y: 1
             }
         }
