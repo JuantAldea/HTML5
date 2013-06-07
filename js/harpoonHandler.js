@@ -15,7 +15,7 @@ var HarpoonHandler = Class.extend({
     },
 
     spawnHarpoon: function (x, y) {
-        if (this.aliveHarpoons.length > 2){
+        if (this.aliveHarpoons.length > 2) {
             return;
         }
 

@@ -1,3 +1,5 @@
+"use strict";
+
 var b2Vec2 = Box2D.Common.Math.b2Vec2;
 var b2AABB = Box2D.Collision.b2AABB;
 var b2BodyDef = Box2D.Dynamics.b2BodyDef;

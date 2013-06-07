@@ -3,37 +3,38 @@
  * Date: 5/10/13
  * Time: 1:12 PM
  */
+
 "use strict";
 
 var PhysicsObject = Class.extend({
-    body: null,
+        body: null,
 
-    bodyDef: null,
+        bodyDef: null,
 
-    fixDef: null,
+        fixDef: null,
 
-    init: function (bodyDef, fixDef) {
-        this.bodyDef = bodyDef;
-        this.fixDef = fixDef;
-        this.bodyDef.position.x *= GameWorld.scaled_width;
-        this.bodyDef.position.y *= GameWorld.scaled_height;
-        this.body = GameWorld.CreateBody(this.bodyDef);
-        this.body.CreateFixture(this.fixDef);
-    },
+        init: function (bodyDef, fixDef) {
+            this.bodyDef = bodyDef;
+            this.fixDef = fixDef;
+            this.bodyDef.position.x *= GameWorld.scaled_width;
+            this.bodyDef.position.y *= GameWorld.scaled_height;
+            this.body = GameWorld.CreateBody(this.bodyDef);
+            this.body.CreateFixture(this.fixDef);
+        },
 
-    getPosition: function () {
-        var p = this.body.GetPosition();
-        return {
-            x: p.x / GameWorld.scaled_width,
-            y: p.y / GameWorld.scaled_height
-        };
-    },
+        getPosition: function () {
+            var p = this.body.GetPosition();
+            return {
+                x: p.x / GameWorld.scaled_width,
+                y: p.y / GameWorld.scaled_height
+            };
+        },
 
-    update: function () {
-    },
+        update: function () {
+        },
 
-    onCollision: function () {
+        onCollision: function () {
 
-    }
-})
-;
+        }
+    })
+    ;

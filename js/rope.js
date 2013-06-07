@@ -34,8 +34,8 @@ var RopeComponent = Block.extend({
             return true;
         };
     },
-    onCollision: function(){
-      this.parentRope.onCollision();
+    onCollision: function () {
+        this.parentRope.onCollision();
     }
 });
 
@@ -75,7 +75,7 @@ var Rope = Class.extend({
 
     update: function () {
         var now = Date.now();
-        if (this.lastExpansionTime + this.expansionTime > now){
+        if (this.lastExpansionTime + this.expansionTime > now) {
             return;
         }
         this.lastExpansionTime = now;

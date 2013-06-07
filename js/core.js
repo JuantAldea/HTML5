@@ -57,7 +57,7 @@ Function.prototype.bind = function (bind) {
     };
 };
 
-merge = function (original, extended) {
+var merge = function (original, extended) {
     for (var key in extended) {
         var ext = extended[key];
         if (typeof (ext) != 'object' || ext instanceof Class) {
@@ -199,68 +199,3 @@ function ksort(obj) {
         return Class;
     };
 })();
-
-newGuid_short = function () {
-    var S4 = function () {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    };
-    return (S4()).toString();
-};
-
-newGuid = function () {
-    var S4 = function () {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    };
-    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4()).toString();
-};
-
-XHR = function (domainURL, callerInstance, function_name, opt_argv) {
-
-    // If optional arguments was not provided, create it as empty
-    if (!opt_argv)
-        opt_argv = new Array();
-
-    // Find if the last arg is a callback function; save it
-    var callback = null;
-    var len = opt_argv.length;
-    if (len > 0 && typeof opt_argv[len - 1] == 'function') {
-        callback = opt_argv[len - 1];
-        opt_argv.length--;
-    }
-    var async = (callback != null);
-
-    // Encode the arguments in to a URI
-    var query = 'fcn=' + encodeURIComponent(function_name);
-    for (var i = 0; i < opt_argv.length - 1; i += 2) {
-        var key = (opt_argv[i]);
-        var val = (opt_argv[i + 1]);
-        //JSON.stringify(..)
-        query += '&' + key + '=' + encodeURIComponent(val);
-    }
-    // query += '&time=' + new Date().getTime(); // IE cache workaround
-
-    //query = "fcn=getActiveGames&p0guid=000";
-    // See http://en.wikipedia.org/wiki/XMLHttpRequest to make this cross-browser compatible
-    var req = new XMLHttpRequest();
-
-    // Create a 'GET' request w/ an optional callback handler
-    req.open('GET', 'http://localhost:8080/grits/?' + query, async);
-
-    if (async) {
-        req.onreadystatechange = function () {
-            if (req.readyState == 4 && req.status == 200) {
-                var response = null;
-                try {
-                    response = JSON.parse(req.responseText);
-                } catch (e) {
-                    response = req.responseText;
-                }
-                callback(response);
-            }
-        }
-    }
-
-    // Make the actual request
-    req.send(null);
-
-};
