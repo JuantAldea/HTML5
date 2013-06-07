@@ -1,3 +1,5 @@
+"use strict";
+
 var Sprites = {
     "bubbles": ["bubble-black", "bubble-blue", "bubble-green", "bubble-orange", "bubble-purple", "bubble-red", "bubble-yellow"],
 

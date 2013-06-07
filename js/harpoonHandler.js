@@ -3,11 +3,12 @@
  * Date: 5/19/13
  * Time: 10:01 PM
  */
+"use strict";
 
-HarpoonHandler = Class.extend({
+var HarpoonHandler = Class.extend({
     aliveHarpoons: [],
     lastShootTime: Date.now(),
-    cooldown: 100,
+    cooldown: 300,
 
     init: function () {
 

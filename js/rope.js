@@ -4,8 +4,8 @@
  * Time: 2:27 PM
  */
 
-
-RopeComponent = Block.extend({
+"use strict";
+var RopeComponent = Block.extend({
     parentRope: null,
 
     init: function (properties, rope) {
@@ -39,7 +39,7 @@ RopeComponent = Block.extend({
     }
 });
 
-Rope = Class.extend({
+var Rope = Class.extend({
     bodies: [],
     x: 0,
     y: 0,

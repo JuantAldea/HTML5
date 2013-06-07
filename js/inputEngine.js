@@ -1,4 +1,6 @@
-InputEngine = Class.extend({
+"use strict";
+
+var InputEngine = Class.extend({
     bindings: {},
     actions: {},
 

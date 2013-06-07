@@ -3,8 +3,9 @@
  * Date: 5/31/13
  * Time: 7:48 PM
  */
+"use strict";
 
-ResourceManager = function () {
+var ResourceManager = function () {
     this.resources = {};
     this.scripts = {};
     this.audioContext = null;
@@ -114,140 +115,18 @@ ResourceManager.prototype.loadFinished = function () {
 ResourceManager.prototype.loadCompleted = function () {
     for (var i = 0; i < resources.length; i++) {
         if (resources[i].type == "script") {
+            break;
             var file = document.createElement('script');
             file.setAttribute("type", "text/javascript");
             file.innerHTML = this.scripts[resources[i].url];
             document.getElementsByTagName("head")[0].appendChild(file);
         }
     }
-    document.getElementById("circular3dG").style.display = "none";
-    document.getElementById("canvas").style.display = "";
+
+    main();
 }
-
-/*
- ResourceManager = Class.extend({
- resources: {},
- scripts: {},
- audioContext: null,
- pendingResources: 0,
-
- init: function () {
- try {
- window.AudioContext = window.AudioContext || window.webkitAudioContext;
- this.audioContext = new webkitAudioContext();
- } catch (e) {
- alert('Web Audio API is not supported in this browser');
- }
- },
-
- loadResources: function (resources) {
- this.pendingResources = resources.length;
- var resource = {};
- for (var i = 0; i < resources.length; i++) {
- resource = resources[i];
- this.loadResource(resource.name, resource.type, resource.url);
- }
- },
-
- playsound: function (name) {
- var source = this.audioContext.createBufferSource(); // creates a sound source
- source.buffer = this.resources[name];                    // tell the source which sound to play
- source.connect(this.audioContext.destination);       // connect the source to the context's destination (the speakers)
- source.start(0);                           // play the source now
- },
-
- loadResource: function (name, type, url) {
- if (this.resources[name] === undefined) {
- if (type == "img") {
- this.loadImage(name, url);
- } else if (type == "sound") {
- this.loadSound(name, url, this);
- } else if (type == "script") {
- this.loadScript(url);
- }
- } else {
- this.loadFinished();
- }
- },
-
- xhrGet: function (reqUri, callback, type, name) {
- var request = new XMLHttpRequest();
- request.open('GET', reqUri, true);
- request.responseType = type;
- var self = this;
- request.onload = function () {
- if (this.readyState == 4 && this.status == 200) {
- callback(name, self, this);
- }
- }
- request.send()
- },
-
- loadImage: function (name, url) {
- this.resources[name] = new Image();
- var img = this.resources[name];
- var self = this;
- img.onload = function () {
- self.loadFinished();
- }
- img.src = url;
- },
-
- loadSound: function (name, url, context) {
- //var self = this;
- this.xhrGet(
- url,
- function (name, context, response) {
- context.audioContext.decodeAudioData(
- response.response,
- function (decoded) {
- context.resources[name] = decoded;
- context.loadFinished();
- },
- function (msg) {
- console.log(msg)
- }
- )
- },
- 'arraybuffer',
- name
- );
- },
-
- loadScript: function (url) {
- var self = this;
- this.xhrGet(
- url,
- function (name, context, response) {
- self.scripts[name] = response.response;
- self.loadFinished();
- },
- '',
- url
- );
- },
-
- loadFinished: function () {
- this.pendingResources--;
- if (this.pendingResources == 0) {
- this.loadCompleted();
- }
- },
-
- loadCompleted: function () {
- for (var i = 0; i < resources.length; i++) {
- if (resources[i].type == "script") {
- var file = document.createElement('script');
- file.setAttribute("type", "text/javascript");
- file.innerHTML = this.scripts[resources[i].url];
- document.getElementsByTagName("head")[0].appendChild(file);
- }
- }
- }
- });
- */
-
 //resources = JSON.parse(JSON.stringify(resources));
+
 var resources = [
 
     {
@@ -273,7 +152,7 @@ var resources = [
     {
         name: "src",
         type: "script",
-        url: "js/box2Dshortcuts.js"
+        url: "js/box2DShortcuts.js"
     },
     {
         name: "src",
@@ -318,17 +197,17 @@ var resources = [
     {
         name: "src",
         type: "script",
-        url: "js/chain.js"
-    },
-    {
-        name: "src",
-        type: "script",
         url: "js/game.js"
     },
     {
         name: "src",
         type: "script",
         url: "js/main.js"
+    },
+    {
+        name: "src",
+        type: "script",
+        url: "js/lives.js"
     },
     {
         name: "bg1",
@@ -354,6 +233,11 @@ var resources = [
         name: "hit",
         type: "sound",
         url: "./sound/hit.wav"
+    },
+    {
+        name: "heart",
+        type: "img",
+        url: "./img/heart.png"
     }
 ];
 

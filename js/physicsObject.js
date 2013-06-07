@@ -3,8 +3,9 @@
  * Date: 5/10/13
  * Time: 1:12 PM
  */
+"use strict";
 
-PhysicsObject = Class.extend({
+var PhysicsObject = Class.extend({
     body: null,
 
     bodyDef: null,

@@ -3,8 +3,8 @@
  * Date: 5/10/13
  * Time: 1:57 PM
  */
-
-Block = PhysicsObject.extend({
+"use strict";
+var Block = PhysicsObject.extend({
     half_width: 0,
     half_height: 0,
 

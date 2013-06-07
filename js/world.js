@@ -1,4 +1,5 @@
-World = Class.extend({
+"use strict";
+var World = Class.extend({
     paused: false,
 
     canvas: null,
@@ -24,6 +25,7 @@ World = Class.extend({
     newBubbles: [],
     bubbles: [],
     blocks: [],
+    player: null,
 
     init: function () {
         this.gravity = new b2Vec2(0, 20);
@@ -34,9 +36,8 @@ World = Class.extend({
         this.scaled_width = this.width / this.scale;
         this.scaled_height = this.height / this.scale;
         this.world = new b2World(this.gravity, false);
-
+        var self = this;
         var listener = new Box2D.Dynamics.b2ContactListener;
-
         listener.BeginContact = function (contact) {
             function compare(type1, type2, obj1, obj2) {
                 return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
@@ -105,7 +106,8 @@ World = Class.extend({
                 } else if (compare("rope", "player", uDA, uDB)) {
                     contact.SetEnabled(false);
                 } else if (compare("player", "bubble", uDA, uDB)) {
-                    player.onCollision("bubble");
+                    self.player.onCollision("bubble");
+
                     contact.SetEnabled(false);
                     //} else if (compare("player", "block-floor", uDA, uDB)) {
                     //} else if (compare("rope", "block", uDA, uDB)) {

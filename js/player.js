@@ -1,7 +1,10 @@
-State = Class.extend({
+"use strict";
+
+var State = Class.extend({
     frames: [],
     context: null,
     frameIndex: 0,
+    framesPerSprite: 10,
 
     init: function (context) {
         this.context = context;
@@ -9,9 +12,9 @@ State = Class.extend({
 
     draw: function () {
         this.frameIndex++;
-        var frames = 10;
-        this.frameIndex = this.frameIndex < (this.frames.length * frames) ? this.frameIndex : 0
-        var p = Math.floor(this.frameIndex / frames);
+
+        this.frameIndex = this.frameIndex < (this.frames.length * this.framesPerSprite) ? this.frameIndex : 0
+        var p = Math.floor(this.frameIndex / this.framesPerSprite);
 
         var frame = this.frames[p];
         var width = 30 * this.context.size.half_width;
@@ -38,7 +41,7 @@ State = Class.extend({
     }
 });
 
-IdleRight = State.extend({
+var IdleRight = State.extend({
     init: function (context) {
         this.parent(context);
         this.frames.push(Sprites.frames["right0"].frame);
@@ -55,7 +58,7 @@ IdleRight = State.extend({
     }
 });
 
-IdleLeft = State.extend({
+var IdleLeft = State.extend({
     init: function (context) {
         this.parent(context);
         this.frames.push(Sprites.frames["left0"].frame);
@@ -72,7 +75,7 @@ IdleLeft = State.extend({
     }
 });
 
-IdleFront = State.extend({
+var IdleFront = State.extend({
     init: function (context) {
         this.parent(context);
         this.frames.push(Sprites.frames["left0"].frame);
@@ -90,7 +93,7 @@ IdleFront = State.extend({
 
 });
 
-WalkingLeft = State.extend({
+var WalkingLeft = State.extend({
     init: function (context) {
         this.parent(context);
         this.frames.push(Sprites.frames["left0"].frame);
@@ -114,7 +117,7 @@ WalkingLeft = State.extend({
     }
 });
 
-WalkingRight = State.extend({
+var WalkingRight = State.extend({
     init: function (context) {
         this.parent(context);
         this.frames.push(Sprites.frames["right0"].frame);
@@ -139,8 +142,7 @@ WalkingRight = State.extend({
 });
 
 
-Player = PhysicsObject.extend({
-
+var Player = PhysicsObject.extend({
     STATE_FRONT_IDLE: new IdleFront(this),
     STATE_LEFT_IDLE: new IdleLeft(this),
     STATE_RIGHT_IDLE: new IdleRight(this),
@@ -174,8 +176,6 @@ Player = PhysicsObject.extend({
         fixDef.density = 100000000000;
         fixDef.friction = 0;
         fixDef.restitution = 0;
-        //fixDef.shape = new b2CircleShape();
-        //fixDef.shape.SetRadius(GameWorld.scaled_height * 0.05);
         this.size.half_width = (GameWorld.scaled_height * 0.05) * 0.51;
         this.size.half_height = GameWorld.scaled_height * 0.05;
         fixDef.shape = new b2PolygonShape();

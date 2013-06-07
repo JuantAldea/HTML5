@@ -1,4 +1,6 @@
-Game = Class.extend({
+"use strict";
+var Game = Class.extend({
+    context: null,
 
     world: null,
 
@@ -7,6 +9,8 @@ Game = Class.extend({
     inputEngine: null,
 
     harpoonHandler: new HarpoonHandler(),
+
+    livesWidget: null,
 
     init: function () {
 
@@ -20,13 +24,13 @@ Game = Class.extend({
 
     setup_bubbles: function (bubbles) {
         for (var bubbleIndex = 0; bubbleIndex < bubbles.length; bubbleIndex++) {
-            GameWorld.spawnBubble(bubbles[bubbleIndex]);
+            this.world.spawnBubble(bubbles[bubbleIndex]);
         }
     },
 
     setup_blocks: function (blocks) {
         for (var i = 0; i < blocks.length; i++) {
-            GameWorld.spawnBlock(blocks[i]);
+            this.world.spawnBlock(blocks[i]);
         }
     },
 
@@ -109,7 +113,7 @@ Game = Class.extend({
         if (this.inputEngine) {
             if (this.inputEngine.actions['fire']) {
                 var position = this.player.body.GetPosition();
-                var spawnPoint = new b2Vec2(position.x / GameWorld.scaled_width, position.y / GameWorld.scaled_height);
+                var spawnPoint = new b2Vec2(position.x / this.world.scaled_width, position.y / this.world.scaled_height);
                 this.harpoonHandler.spawnHarpoon(spawnPoint.x, spawnPoint.y);
             }
 
@@ -135,7 +139,7 @@ Game = Class.extend({
 
             if (movement.x !== 0 || movement.y !== 0) {
                 movement.Normalize();
-                movement.Multiply(self.player.linear_velocity);
+                movement.Multiply(this.player.linear_velocity);
             } else {
                 this.player.stop();
             }
@@ -147,6 +151,7 @@ Game = Class.extend({
         this.world.update();
         this.world.draw(true);
         this.player.draw();
+        this.livesWidget.draw(this.context);
     },
 
     start: function () {
@@ -159,3 +164,5 @@ Game = Class.extend({
         }, 1000 / 60);
     }
 });
+
+

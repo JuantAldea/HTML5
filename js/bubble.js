@@ -3,8 +3,9 @@
  * Date: 5/10/13
  * Time: 1:07 PM
  */
+"use strict";
+var Bubble = PhysicsObject.extend({
 
-Bubble = PhysicsObject.extend({
     isSplit: false,
 
     init: function (bubble) {
