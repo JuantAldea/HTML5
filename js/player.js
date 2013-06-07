@@ -1,147 +1,5 @@
 "use strict";
 
-var State = Class.extend({
-    frames: [],
-    context: null,
-    frameIndex: 0,
-    framesPerSprite: 10,
-
-    init: function (context) {
-        this.context = context;
-    },
-
-    draw: function () {
-        this.frameIndex++;
-
-        this.frameIndex = this.frameIndex < (this.frames.length * this.framesPerSprite) ? this.frameIndex : 0
-        var p = Math.floor(this.frameIndex / this.framesPerSprite);
-
-        var frame = this.frames[p];
-        var width = 30 * this.context.size.half_width;
-        var height = 30 * this.context.size.half_height;
-        var px = this.context.body.GetPosition().x * 30;
-        var py = this.context.body.GetPosition().y * 30;
-        GameWorld.context.drawImage(RM.resources["sprites"],
-            frame.x, frame.y,
-            frame.w, frame.h,
-            px - width, py - height,
-            width * 2, height * 2);
-    },
-
-    left: function () {
-
-    },
-
-    right: function () {
-
-    },
-
-    stop: function () {
-
-    }
-});
-
-var IdleRight = State.extend({
-    init: function (context) {
-        this.parent(context);
-        this.frames.push(Sprites.frames["right0"].frame);
-    },
-
-    right: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_RIGHT_WALKING;
-    },
-
-    left: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_FRONT_IDLE;
-    }
-});
-
-var IdleLeft = State.extend({
-    init: function (context) {
-        this.parent(context);
-        this.frames.push(Sprites.frames["left0"].frame);
-    },
-
-    left: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_LEFT_WALKING;
-    },
-
-    right: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_FRONT_IDLE;
-    }
-});
-
-var IdleFront = State.extend({
-    init: function (context) {
-        this.parent(context);
-        this.frames.push(Sprites.frames["left0"].frame);
-    },
-
-    left: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_LEFT_IDLE;
-    },
-
-    right: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_RIGHT_IDLE;
-    }
-
-});
-
-var WalkingLeft = State.extend({
-    init: function (context) {
-        this.parent(context);
-        this.frames.push(Sprites.frames["left0"].frame);
-        this.frames.push(Sprites.frames["left1"].frame);
-        this.frames.push(Sprites.frames["left2"].frame);
-        this.frames.push(Sprites.frames["left3"].frame);
-        this.frames.push(Sprites.frames["left4"].frame);
-        this.frames.push(Sprites.frames["left5"].frame);
-        this.frames.push(Sprites.frames["left6"].frame);
-        this.frames.push(Sprites.frames["left7"].frame);
-    },
-
-    stop: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_LEFT_IDLE;
-    },
-
-    right: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_FRONT_IDLE;
-    }
-});
-
-var WalkingRight = State.extend({
-    init: function (context) {
-        this.parent(context);
-        this.frames.push(Sprites.frames["right0"].frame);
-        this.frames.push(Sprites.frames["right1"].frame);
-        this.frames.push(Sprites.frames["right2"].frame);
-        this.frames.push(Sprites.frames["right3"].frame);
-        this.frames.push(Sprites.frames["right4"].frame);
-        this.frames.push(Sprites.frames["right5"].frame);
-        this.frames.push(Sprites.frames["right6"].frame);
-        this.frames.push(Sprites.frames["right7"].frame);
-    },
-
-    stop: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_RIGHT_IDLE;
-    },
-
-    left: function () {
-        this.frameIndex = 0;
-        this.context.state = this.context.STATE_FRONT_IDLE;
-    }
-});
-
-
 var Player = PhysicsObject.extend({
     STATE_FRONT_IDLE: new IdleFront(this),
     STATE_LEFT_IDLE: new IdleLeft(this),
@@ -150,19 +8,27 @@ var Player = PhysicsObject.extend({
     STATE_RIGHT_WALKING: new WalkingRight(this),
     state: null,
 
-    vulnerabilityCD: 2000,
-    lastLiveLoss: Date.now(),
+    vulnerabilityCD: 3000,
+
+    lastLiveLoss: 0,
+
     lives: 3,
+
     position: {
         x: 0.5,
         y: 0.95
     },
+
     size: {
         half_width: 1,
         half_height: 3
     },
+
     linear_velocity: 10,
+
     velocity: null,
+
+    invulnerable: false,
 
     init: function () {
         this.velocity = new b2Vec2(0, 0);
@@ -197,9 +63,9 @@ var Player = PhysicsObject.extend({
 
     onCollision: function (object) {
         if (object == "bubble") {
-            var now = Date.now();
-            if (now - this.lastLiveLoss >= this.vulnerabilityCD) {
-                this.lastLiveLoss = now;
+            if (!this.invulnerable) {
+                this.invulnerable = true;
+                this.lastLiveLoss = Date.now();
                 this.lives--;
                 if (this.lives < 0) {
                     GameWorld.togglePause();
@@ -212,6 +78,9 @@ var Player = PhysicsObject.extend({
     index: 0,
 
     draw: function () {
+        if (this.invulnerable && (Date.now() - this.lastLiveLoss) >= this.vulnerabilityCD) {
+            this.invulnerable = false;
+        }
         this.state.draw();
     },
 

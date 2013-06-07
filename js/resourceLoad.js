@@ -68,6 +68,11 @@ var resources = [
     {
         name: "src",
         type: "script",
+        url: "js/playerStates.js"
+    },
+    {
+        name: "src",
+        type: "script",
         url: "js/player.js"
     },
     {
