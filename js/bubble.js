@@ -16,7 +16,6 @@ var Bubble = PhysicsObject.extend({
 
         var bodyDef = new b2BodyDef();
         bodyDef.userData = copy(bubble);
-        console.log(bodyDef.userData.impulse);
         bodyDef.type = b2Body.b2_dynamicBody;
         fixDef.shape = new b2CircleShape(bubble.radius * GameWorld.scaled_height);
 
@@ -30,7 +29,7 @@ var Bubble = PhysicsObject.extend({
         bodyDef.userData.sprite = bodyDef.userData.sprite ? bodyDef.userData.sprite : Sprites.frames[[Sprites.bubbles[color]]];
 
         this.parent(bodyDef, fixDef);
-        console.log(GameWorld.scaled_width, GameWorld.scaled_height);
+
         this.body.ApplyImpulse(
             new b2Vec2(
                 bodyDef.userData.impulse.x * GameWorld.scaled_width * 0.25 * bubble.radius * GameWorld.scaled_height,

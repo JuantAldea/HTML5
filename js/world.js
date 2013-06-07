@@ -49,7 +49,7 @@ var World = Class.extend({
             uDB = uDB['name'];
             if (uDA != null && uDB != null) {
                 if (compare("rope", "block", uDA, uDB)) {
-                    //console.log("pollaca");
+                    //NOP
                 }
             }
         };
@@ -66,7 +66,7 @@ var World = Class.extend({
 
             if (uDA != null && uDB != null) {
                 if (compare("block", "rope", uDA, uDB)) {
-                    //console.log("pollaca");
+                    //NOP
                 }
             }
         };
@@ -116,7 +116,6 @@ var World = Class.extend({
                     contact.m_fixtureA.GetBody().GetUserData().object.onCollision(uDB);
                     contact.m_fixtureB.GetBody().GetUserData().object.onCollision(uDA);
                     //contact.SetEnabled(false);
-                    //console.log(uDA, uDB);
                 }
             }
 
