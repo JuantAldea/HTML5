@@ -7,8 +7,8 @@
 
 var HarpoonHandler = Class.extend({
     aliveHarpoons: [],
-    lastShootTime: Date.now(),
-    cooldown: 300,
+    lastShootTime: 0,
+    cooldown: 700,
 
     init: function () {
 
