@@ -5,7 +5,6 @@
  */
 
 var resources = [
-
     {
         name: "src",
         type: "script",
@@ -117,3 +116,18 @@ var resources = [
         url: "./img/heart.png"
     }
 ];
+
+window.onload = function () {
+    var request = new XMLHttpRequest();
+    request.open('GET', "js/resourceManager.js", true);
+    request.onload = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var file = document.createElement('script');
+            file.setAttribute("type", "text/javascript");
+            file.innerHTML = this.responseText;
+            document.getElementsByTagName("head")[0].appendChild(file);
+            RM.loadResources(resources);
+        }
+    }
+    request.send();
+}
