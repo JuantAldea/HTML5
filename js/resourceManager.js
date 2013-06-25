@@ -29,6 +29,9 @@ ResourceManager.prototype.loadResources = function (resources) {
 }
 
 ResourceManager.prototype.playSound = function (name) {
+    if (!this.audioContext) {
+        return;
+    }
     var source = this.audioContext.createBufferSource();
     source.buffer = this.resources[name];
     source.connect(this.audioContext.destination);
@@ -40,7 +43,7 @@ ResourceManager.prototype.loadResource = function (name, type, url) {
         if (type == "img") {
             this.loadImage(name, url);
         } else if (type == "sound") {
-            this.loadSound(name, url, this);
+            this.loadSound(name, url);
         } else if (type == "script") {
             this.loadScript(url);
         }
@@ -71,7 +74,13 @@ ResourceManager.prototype.loadImage = function (name, url) {
     img.src = url;
 }
 
-ResourceManager.prototype.loadSound = function (name, url, context) {
+ResourceManager.prototype.loadSound = function (name, url) {
+
+    if (!this.audioContext) {
+        this.loadFinished();
+        return;
+    }
+
     var self = this;
     this.xhrGet(
         url,

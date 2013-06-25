@@ -67,9 +67,6 @@ var Player = PhysicsObject.extend({
                 this.invulnerable = true;
                 this.lastLiveLoss = Date.now();
                 this.lives--;
-                if (this.lives < 0) {
-                    GameWorld.togglePause();
-                }
                 RM.playSound("hit");
             }
         }

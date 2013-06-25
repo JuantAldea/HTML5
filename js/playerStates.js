@@ -19,7 +19,7 @@ var State = Class.extend({
     draw: function () {
         this.frameIndex++;
         if (this.context.invulnerable && this.frameIndex % 4 != 0) {
-            //blinking easy more -> frame skip
+            //frame skip
             return;
         }
 

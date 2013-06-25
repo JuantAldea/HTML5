@@ -22,7 +22,6 @@ function main() {
         game.world = GameWorld;
         game.context = canvas.getContext("2d");
         game.player = player;
-        game.inputEngine = new InputEngine();
         game.livesWidget = new Lives(player);
         game.start();
     }, 50);

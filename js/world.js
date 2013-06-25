@@ -3,6 +3,7 @@ var World = Class.extend({
     paused: false,
 
     canvas: null,
+
     context: null,
 
     width: window.innerWidth,
@@ -20,12 +21,13 @@ var World = Class.extend({
     gravity: null,
 
     bodiesToDestroy: [],
-    lastStep: Date.now(),
 
+    lastStep: Date.now(),
+    aliveBubbles: 0,
     newBubbles: [],
-    bubbles: [],
-    blocks: [],
+    bodies: [],
     player: null,
+    pausedTime: 0,
 
     init: function () {
         this.gravity = new b2Vec2(0, 20);
@@ -38,6 +40,7 @@ var World = Class.extend({
         this.world = new b2World(this.gravity, false);
         var self = this;
         var listener = new Box2D.Dynamics.b2ContactListener;
+
         listener.BeginContact = function (contact) {
             function compare(type1, type2, obj1, obj2) {
                 return type1 == obj1 && type2 == obj2 || type1 == obj2 && type2 == obj1;
@@ -82,7 +85,7 @@ var World = Class.extend({
                 uDA = uDA['name'];
                 uDB = uDB['name'];
                 if (compare("rope", "bubble", uDA, uDB)) {
-
+                    //NOP
                 }
             }
         };
@@ -107,7 +110,6 @@ var World = Class.extend({
                     contact.SetEnabled(false);
                 } else if (compare("player", "bubble", uDA, uDB)) {
                     self.player.onCollision("bubble");
-
                     contact.SetEnabled(false);
                     //} else if (compare("player", "block-floor", uDA, uDB)) {
                     //} else if (compare("rope", "block", uDA, uDB)) {
@@ -118,7 +120,6 @@ var World = Class.extend({
                     //contact.SetEnabled(false);
                 }
             }
-
         };
 
         this.world.SetContactListener(listener);
@@ -139,55 +140,69 @@ var World = Class.extend({
     },
 
     spawnBlock: function (block) {
-        this.blocks.push(new Block(block));
+        this.bodies.push(new Block(block));
     },
 
     togglePause: function () {
         this.paused = !this.paused;
+        this.lastPauseToggle = Date.now();
+
+        if (this.paused) {
+            this.pausedTime = Date.now();
+        } else {
+            this.lastStep += (Date.now() - this.pausedTime);
+        }
     },
 
     update: function () {
-        if (!this.paused) {
-            var currentTime = Date.now();
-            var dt = currentTime - this.lastStep;
-            var steps = Math.floor(dt / 16.667);
-            this.lastStep += steps * 16.667;
+        var currentTime = Date.now();
+        var dt = currentTime - this.lastStep;
+        var steps = Math.floor(dt / 16.667);
+        this.lastStep += steps * 16.667;
 
-            for (var i = 0; i < steps; i++) {
-                this.world.Step(1.0 / 60.0, 10, 10);
+        for (var i = 0; i < steps; i++) {
+            this.world.Step(1.0 / 60.0, 10, 10);
+        }
+
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.world.ClearForces();
+
+        this.spawnBubbles();
+
+        this.destroyBodies();
+    },
+
+    spawnBubbles: function () {
+        for (var i = 0; i < this.newBubbles.length; i++) {
+            this.bodies.push(new Bubble(this.newBubbles[i]));
+            this.aliveBubbles++;
+        }
+
+        this.newBubbles = [];
+    },
+
+
+    destroyBodies: function () {
+        for (var i = 0; i < this.bodiesToDestroy.length; i++) {
+            if (this.bodiesToDestroy[i].GetUserData().name == "bubble"){
+                this.aliveBubbles--;
             }
+            this.bodies.erase(this.bodiesToDestroy[i].GetUserData().object);
+            this.world.DestroyBody(this.bodiesToDestroy[i]);
+        }
+        this.bodiesToDestroy = [];
+    },
 
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.world.ClearForces();
-
-            for (var i = 0; i < this.newBubbles.length; i++) {
-                this.bubbles.push(new Bubble(this.newBubbles[i]));
-            }
-
-            this.newBubbles = [];
-
-
-            for (var i = 0; i < this.bodiesToDestroy.length; i++) {
-                this.bubbles.erase(this.bodiesToDestroy[i].GetUserData().object);
-                this.world.DestroyBody(this.bodiesToDestroy[i]);
-            }
-
-            this.bodiesToDestroy = [];
-
-            if (this.bubbles.length == 0) {
-                this.togglePause();
-            }
+    clearBodies: function () {
+        for (var i = 0; i < this.bodies.length; i++){
+            this.bodiesToDestroy.push(this.bodies[i].body);
         }
     },
 
     draw: function (debug) {
         this.context.drawImage(RM.resources["bg1"], 0, 0, this.canvas.width, this.canvas.height)
-        for (var i = 0; i < this.bubbles.length; i++) {
-            this.bubbles[i].draw(this.context);
-        }
-
-        for (var i = 0; i < this.blocks.length; i++) {
-            this.blocks[i].draw(this.context);
+        for (var i = 0; i < this.bodies.length; i++) {
+            this.bodies[i].draw(this.context);
         }
 
         if (debug) {
