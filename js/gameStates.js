@@ -33,7 +33,7 @@ var GameStateLevelInterlude = GameState.extend({
     update: function () {
         this.context.world.clearBodies();
         this.context.world.update();
-        this.context.setup_level(0);
+        this.context.setup_level(1);
         this.context.gameState = this.context.GAME_STATE_RUNNING;
     }
 });
