@@ -145,8 +145,6 @@ var World = Class.extend({
 
     togglePause: function () {
         this.paused = !this.paused;
-        this.lastPauseToggle = Date.now();
-
         if (this.paused) {
             this.pausedTime = Date.now();
         } else {
