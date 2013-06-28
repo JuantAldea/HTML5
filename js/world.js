@@ -145,6 +145,7 @@ var World = Class.extend({
 
     togglePause: function () {
         this.paused = !this.paused;
+        this.lastPauseToggle = Date.now();
         if (this.paused) {
             this.pausedTime = Date.now();
         } else {
@@ -157,7 +158,7 @@ var World = Class.extend({
         var dt = currentTime - this.lastStep;
         var steps = Math.floor(dt / 16.667);
         this.lastStep += steps * 16.667;
-
+        
         for (var i = 0; i < steps; i++) {
             this.world.Step(1.0 / 60.0, 10, 10);
         }
